@@ -87,6 +87,18 @@ function App() {
     }
   };
 
+  const handleDelete = async (id, title) => {
+    if (window.confirm(`Are you sure you want to delete "${title}"?`)) {
+      try {
+        await axios.delete(`${API_URL}/feedback/${id}`);
+        fetchFeedback();
+        toast.success('Feedback deleted successfully!');
+      } catch (error) {
+        toast.error('Failed to delete feedback');
+      }
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -219,6 +231,13 @@ function App() {
                               onClick={() => handleVote(item._id)}
                             >
                               👍 {item.votes}
+                            </button>
+                            <button 
+                              className="delete-btn"
+                              onClick={() => handleDelete(item._id, item.title)}
+                              title="Delete feedback"
+                            >
+                              🗑️
                             </button>
                           </div>
                         </div>
