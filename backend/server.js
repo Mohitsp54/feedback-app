@@ -10,7 +10,11 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-netlify-app.netlify.app'] 
+    ? [
+        'https://feedback-frontend.onrender.com',
+        'https://your-frontend-app.onrender.com',
+        /\.onrender\.com$/
+      ]
     : ['http://localhost:3000'],
   credentials: true
 }));
