@@ -1,175 +1,115 @@
-# Feedback Hub - MERN Stack Application
+# Feedback Hub
 
-A full-stack feedback management application built with React, Node.js, Express, and MongoDB.
+A MERN stack application for collecting and managing user feedback with voting, filtering, and categorization capabilities.
 
-## Features
+## Overview
 
-- ✅ Add feedback with title, description, and category
-- ✅ View feedback grouped by categories (Bug, Feature, Improvement)
-- ✅ Search and filter feedback
-- ✅ Sort by newest/oldest
-- ✅ Upvote feedback items
-- ✅ Responsive design
-- ✅ Real-time updates
-- ✅ Form validation and error handling
+Built to streamline feedback collection and prioritization for product teams. The application allows users to submit feedback with categories (Bug, Feature, Improvement), vote on submissions, and filter/search through feedback items.
 
-## Tech Stack
+**Architecture:** Traditional 3-tier MERN stack with React frontend, Express.js REST API, and MongoDB for persistence. Frontend communicates with backend via REST endpoints for CRUD operations.
+
+## Tech Stack & Rationale
 
 **Frontend:**
-- React 19
-- Axios for API calls
-- React Toastify for notifications
-- CSS3 with modern styling
+- **React 19** - Component-based UI for maintainable, reusable interface elements
+- **Axios** - Promise-based HTTP client for clean API integration
+- **React Toastify** - User feedback notifications without heavy UI libraries
 
 **Backend:**
-- Node.js & Express
-- MongoDB with Mongoose
-- CORS enabled
-- Input validation
+- **Express.js** - Minimal, fast web framework for REST API development
+- **MongoDB + Mongoose** - Document database ideal for flexible feedback schema
+- **Joi** - Schema validation to ensure data integrity
 
-## Local Development
+## Local Setup
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- MongoDB Atlas account or local MongoDB
+- Node.js (v18+)
+- MongoDB connection string
 
-### Backend Setup
-1. Navigate to backend directory:
+### Environment Variables
+
+**Backend (.env):**
+```
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database
+PORT=5000
+```
+
+**Frontend (.env.local):**
+```
+REACT_APP_API_URL=http://localhost:5000/api
+```
+
+### Running the Application
+
+1. **Backend:**
    ```bash
    cd backend
-   ```
-
-2. Install dependencies:
-   ```bash
    npm install
-   ```
-
-3. Create `.env` file with your MongoDB connection string:
-   ```
-   MONGODB_URI=your_mongodb_connection_string
-   PORT=5000
-   ```
-
-4. Start the backend server:
-   ```bash
    npm start
    ```
 
-### Frontend Setup
-1. Install dependencies:
+2. **Frontend:**
    ```bash
    npm install
-   ```
-
-2. Start the React development server:
-   ```bash
    npm start
    ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## Deployment
-
-### Frontend (Netlify)
-
-1. **Build the project:**
-   ```bash
-   npm run build
-   ```
-
-2. **Deploy to Netlify:**
-   - Connect your GitHub repository to Netlify
-   - Set build command: `npm run build`
-   - Set publish directory: `build`
-   - Add environment variable: `REACT_APP_API_URL` with your backend URL
-
-3. **Configure environment variables:**
-   - In Netlify dashboard, go to Site settings > Environment variables
-   - Add: `REACT_APP_API_URL=https://your-backend-url.com/api`
-
-### Backend (Heroku/Railway/Render)
-
-1. **For Heroku:**
-   ```bash
-   # Create Heroku app
-   heroku create your-app-name
-
-   # Set environment variables
-   heroku config:set MONGODB_URI=your_mongodb_connection_string
-   heroku config:set NODE_ENV=production
-
-   # Deploy
-   git subtree push --prefix backend heroku main
-   ```
-
-2. **For Railway:**
-   - Connect your GitHub repository
-   - Select the `backend` folder as root
-   - Add environment variables in Railway dashboard
-
-3. **For Render:**
-   - Connect your GitHub repository
-   - Set root directory to `backend`
-   - Add environment variables in Render dashboard
-
-## Environment Variables
-
-### Frontend (.env.production)
-```
-REACT_APP_API_URL=https://your-backend-url.com/api
-```
-
-### Backend (.env)
-```
-MONGODB_URI=your_mongodb_connection_string
-PORT=5000
-NODE_ENV=production
-```
+Application runs at `http://localhost:3000`
 
 ## API Endpoints
 
-- `GET /api/feedback` - Get all feedback (with optional query params)
-- `POST /api/feedback` - Create new feedback
-- `PUT /api/feedback/:id/vote` - Upvote feedback
+### GET /api/feedback
+Retrieve feedback items with optional filtering
 
-## Project Structure
+**Query Parameters:**
+- `category` - Filter by Bug/Feature/Improvement
+- `q` - Search by title
+- `sort` - newest (default) or oldest
 
-```
-feedback-app/
-├── backend/
-│   ├── models/
-│   │   └── Feedback.js
-│   ├── routes/
-│   │   └── feedback.js
-│   ├── server.js
-│   └── package.json
-├── src/
-│   ├── App.js
-│   ├── App.css
-│   └── index.js
-├── public/
-│   ├── _redirects
-│   └── index.html
-├── netlify.toml
-└── package.json
+**Response:**
+```json
+[
+  {
+    "_id": "66a1234567890abcdef12345",
+    "title": "Login button not working",
+    "description": "The login button becomes unresponsive after clicking",
+    "category": "Bug",
+    "votes": 5,
+    "createdAt": "2024-07-25T10:30:00.000Z"
+  }
+]
 ```
 
-### Analyzing the Bundle Size
+### POST /api/feedback
+Create new feedback
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+**Request Body:**
+```json
+{
+  "title": "Add dark mode",
+  "description": "Users want a dark theme option",
+  "category": "Feature"
+}
+```
 
-### Making a Progressive Web App
+### PUT /api/feedback/:id/vote
+Increment vote count for feedback item
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### DELETE /api/feedback/:id
+Remove feedback item
 
-### Advanced Configuration
+## Trade-offs & Future Improvements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+**Current Limitations:**
+- No user authentication (anyone can vote/delete)
+- Single vote per user not enforced
+- No feedback status tracking (open/in-progress/closed)
+- Basic search (title only)
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Next Iterations:**
+1. **User Authentication** - JWT-based auth to track votes and ownership
+2. **Real-time Updates** - WebSocket integration for live vote counts
+3. **Advanced Search** - Full-text search across title and description
+4. **Admin Dashboard** - Feedback management and analytics
+5. **Status Workflow** - Track feedback lifecycle from submission to resolution
+6. **API Rate Limiting** - Prevent spam and abuse
