@@ -64,7 +64,6 @@ Retrieve feedback items with optional filtering
 **Query Parameters:**
 - `category` - Filter by Bug/Feature/Improvement
 - `q` - Search by title
-- `sort` - newest (default) or oldest
 
 **Response:**
 ```json
