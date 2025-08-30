@@ -12,7 +12,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [sortOrder, setSortOrder] = useState('newest');
   const [expandedGroups, setExpandedGroups] = useState({
     Bug: true,
     Feature: true,
@@ -33,7 +32,6 @@ function App() {
       const params = new URLSearchParams();
       if (searchTerm) params.append('q', searchTerm);
       if (selectedCategory !== 'All') params.append('category', selectedCategory);
-      if (sortOrder) params.append('sort', sortOrder);
 
       const response = await axios.get(`${API_URL}/feedback?${params}`);
       setFeedback(response.data);
@@ -43,7 +41,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  }, [searchTerm, selectedCategory, sortOrder]);
+  }, [searchTerm, selectedCategory]);
 
   useEffect(() => {
     fetchFeedback();
@@ -162,14 +160,6 @@ function App() {
             {categories.map(cat => (
               <option key={cat} value={cat}>{cat}</option>
             ))}
-          </select>
-          
-          <select 
-            value={sortOrder} 
-            onChange={(e) => setSortOrder(e.target.value)}
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
           </select>
         </div>
       </div>
