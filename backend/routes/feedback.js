@@ -69,7 +69,6 @@ router.put('/:id/vote', async (req, res) => {
   }
 });
 
-// DELETE /feedback/:id - Delete feedback
 router.delete('/:id', async (req, res) => {
   try {
     const feedback = await Feedback.findByIdAndDelete(req.params.id);
